@@ -26,4 +26,8 @@ public class IngredientService {
             return ingredientRepository.search(searchTerm);
         }
     }
+
+    public void save(Ingredient ingredient) {
+        ingredientRepository.save(ingredient);
+    }
 }

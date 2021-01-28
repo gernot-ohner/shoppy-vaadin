@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import dev.ohner.shoppy.ui.view.IngredientView;
 import dev.ohner.shoppy.ui.view.MainView;
 import dev.ohner.shoppy.ui.view.RecipesView;
 
@@ -44,6 +45,9 @@ public class MainLayout extends AppLayout {
         RouterLink recipesLink = new RouterLink("Recipes", RecipesView.class);
         mainLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        addToDrawer(new VerticalLayout(mainLink, recipesLink));
+        RouterLink ingredientsLink = new RouterLink("Ingredients", IngredientView.class);
+        mainLink.setHighlightCondition(HighlightConditions.sameLocation());
+
+        addToDrawer(new VerticalLayout(mainLink, recipesLink, ingredientsLink));
     }
 }

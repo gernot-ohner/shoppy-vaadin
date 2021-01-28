@@ -23,6 +23,6 @@ public class Recipe implements Cloneable {
     private Double cookingTimeInMinutes;
 
     @ManyToMany(targetEntity = Ingredient.class, fetch = FetchType.EAGER)
-    private final Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients;
 
 }
