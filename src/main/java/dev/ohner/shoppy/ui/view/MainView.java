@@ -26,6 +26,7 @@ public class MainView extends VerticalLayout {
     private final HorizontalLayout emailLayout = new HorizontalLayout(emailField, sendPerMailButton);
 
     private final Button generateMealPlanButton = new Button("Generate a new Meal Plan!");
+    private MealPlan mealPlan;
 
     private final H2 recipeHeader = new H2("Recipes");
     private final Grid<Recipe> recipeGrid = new Grid<>(Recipe.class);
@@ -41,8 +42,10 @@ public class MainView extends VerticalLayout {
 
         sendPerMailButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         sendPerMailButton.addClickListener(e -> sendMail());
+        sendPerMailButton.setEnabled(false);
 
         emailField.setPlaceholder("email@example.com");
+        emailField.setEnabled(false);
 
         generateMealPlanButton.addThemeVariants(ButtonVariant.LUMO_ICON);
         generateMealPlanButton.addClickListener(event -> showNewMealPlan());
@@ -57,18 +60,34 @@ public class MainView extends VerticalLayout {
     }
 
     public void sendMail() {
+        if (mealPlan == null) {
+            add(new H2("No meal plan was generated yet!"));
+            return;
+        }
 
         final var mailAddress = emailField.getValue();
-        final var text = "this mail would have been sent to " + mailAddress;
-        mailService.sendMail("gernot.ohner@gmail.com", "Shoppy Meal Plan", text);
+        final StringBuilder mailText = new StringBuilder();
+        mailText.append("This mail would have been sent to: ")
+                .append(mailAddress)
+                .append("\nFor your meal plan, you should buy the following ingredients:\n");
 
-        remove(emailField, sendPerMailButton);
+        mealPlan.getIngredients().forEach(ingredient -> mailText.append("[ ] ")
+                .append(ingredient)
+                .append("\n"));
+
+        mailText.append("From Shoppy with <3");
+
+        mailService.sendMail("gernot.ohner@gmail.com", "Shoppy Meal Plan", mailText.toString());
+
+        remove(emailLayout);
         add(new H2("Sent!"));
 
     }
 
     public void showNewMealPlan() {
-        final var mealPlan = mealPlanGeneratorService.generate();
+        mealPlan = mealPlanGeneratorService.generate();
+        emailField.setEnabled(true);
+        sendPerMailButton.setEnabled(true);
         configureMealPlanDisplay(mealPlan);
     }
 
