@@ -94,10 +94,12 @@ public class MainView extends VerticalLayout {
     private void configureMealPlanDisplay(MealPlan mealPlan) {
         recipeGrid.setColumns("id", "name");
         recipeGrid.setItems(mealPlan.getRecipes());
+        recipeGrid.setHeightByRows(true);
         recipeLayout.setVisible(true);
 
         ingredientGrid.setColumns("id", "name");
         ingredientGrid.setItems(mealPlan.getIngredients());
+        ingredientGrid.setHeightByRows(true);
         ingredientLayout.setVisible(true);
     }
 

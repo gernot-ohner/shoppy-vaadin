@@ -40,10 +40,7 @@ public class MealPlanGeneratorService {
 
         mealPlan.setIngredients(ingredients);
 
-        System.out.println(mealPlan);
-
         return mealPlan;
-
     }
 
 
