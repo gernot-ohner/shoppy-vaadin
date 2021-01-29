@@ -6,7 +6,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
-import dev.ohner.shoppy.backend.RecipeService;
+import dev.ohner.shoppy.backend.service.RecipeService;
 import dev.ohner.shoppy.backend.persistence.model.Recipe;
 import dev.ohner.shoppy.ui.MainLayout;
 import dev.ohner.shoppy.ui.form.RecipeForm;
@@ -26,17 +26,19 @@ public class RecipesView extends Div {
     private final Grid<Recipe> recipeGrid = new Grid<>(Recipe.class);
     private boolean showRecipes = true;
 
-    private final RecipeForm recipeForm = new RecipeForm();
+    private final RecipeForm recipeForm;
 
-
-    public RecipesView(RecipeService recipeService) {
+    public RecipesView(RecipeService recipeService, RecipeForm recipeForm) {
         this.recipeService = recipeService;
+        this.recipeForm = recipeForm;
 
         newRecipeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         // TODO configure a fixed size for the toggle button
 
-        recipeForm.addListener(RecipeForm.SaveEvent.class, this::saveRecipe);
+        this.recipeForm.addListener(RecipeForm.SaveEvent.class, this::saveRecipe);
+        this.recipeForm.addListener(RecipeForm.CloseEvent.class, this::cancel);
+        this.recipeForm.addListener(RecipeForm.DeleteEvent.class, this::deleteRecipe);
 
         updateVisibility();
         setSizeFull();
@@ -46,7 +48,7 @@ public class RecipesView extends Div {
         configureRecipeGrid();
         updateList();
 
-        add(new HorizontalLayout(toggleShowRecipes, newRecipeButton), recipeForm, recipeGrid);
+        add(new HorizontalLayout(toggleShowRecipes, newRecipeButton), this.recipeForm, recipeGrid);
     }
 
     private void updateVisibility() {
@@ -81,6 +83,14 @@ public class RecipesView extends Div {
     private void saveRecipe(RecipeForm.SaveEvent event) {
         recipeService.save(event.getRecipe());
         updateList();
+    }
+
+    private void cancel(RecipeForm.CloseEvent event) {
+        // TODO implement cancel functionality
+    }
+
+    private void deleteRecipe(RecipeForm.DeleteEvent event) {
+        recipeService.delete(event.getRecipe());
     }
 
 }

@@ -1,15 +1,14 @@
-package dev.ohner.shoppy.backend;
+package dev.ohner.shoppy.backend.service;
 
 import dev.ohner.shoppy.backend.persistence.RecipeRepository;
 import dev.ohner.shoppy.backend.persistence.model.Recipe;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.List;
 
 @Service
+@RequestScope
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
@@ -24,6 +23,10 @@ public class RecipeService {
 
     public void save(Recipe recipe) {
         recipeRepository.save(recipe);
+    }
+
+    public void delete(Recipe recipe) {
+        recipeRepository.delete(recipe);
     }
 }
 
